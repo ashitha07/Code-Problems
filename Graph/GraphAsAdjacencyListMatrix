@@ -1,0 +1,103 @@
+/*This program is to depict a graph as adjacency matrix and adjacency list*/
+#include<iostream>
+#include<list>
+#include<vector>
+
+using namespace std;
+
+//AdjacencyMatrix
+class GraphAdjMatrix {
+ private:
+    bool** adjacencyMatrix;
+    int numVertices;
+ public:
+    GraphAdjMatrix(int numV){
+        numVertices = numV;
+        adjacencyMatrix = new bool*[numVertices];
+        for(int i=0;i<numVertices;i++){
+            adjacencyMatrix[i] = new bool[numVertices];
+            for(int j=0;j<numVertices;j++){
+                adjacencyMatrix[i][j] = false;
+            }
+        }
+    }
+    void addEdge(int i,int j){
+        adjacencyMatrix[i][j]=true;
+        adjacencyMatrix[j][i]=true;
+    }
+    void removeEdge(int i,int j){
+        adjacencyMatrix[i][j]=false;
+        adjacencyMatrix[j][i]=false;
+    }
+    ~GraphAdjMatrix(){
+        for(int i=0;i<numVertices;i++){
+                delete[] adjacencyMatrix[i]; 
+        }
+        delete[] adjacencyMatrix;
+    }
+    void printGraph(){
+        for(int i=0;i<numVertices;i++){
+            cout<<i<<" : ";
+            for(int j=0;j<numVertices;j++){
+                cout<<adjacencyMatrix[i][j]<<" ";
+            }
+            cout<<endl;
+        }
+    }
+};
+
+//Adjacency List
+class GraphAdjList {
+    private:
+        int numVertices;
+        vector<list<int>> AdjList;
+        
+    public:
+        GraphAdjList(int v){
+            numVertices = v;
+            AdjList.resize(v);
+        }
+        void addEdge(int src, int dest);
+        void removeEdge(int src,int desc);
+        void printGraph();
+};
+void GraphAdjList::addEdge(int src,int dest){
+    AdjList[src].push_back(dest);
+    AdjList[dest].push_back(src);
+}
+void GraphAdjList::removeEdge(int src,int dest){
+    AdjList[src].remove(dest);
+    AdjList[dest].remove(src);
+}
+void GraphAdjList::printGraph(){
+    for(int i=0;i<numVertices;i++){
+        cout<<i<<"  --> ";
+        for (auto itr = AdjList[i].begin();itr != AdjList[i].end(); itr++) {
+            cout << *itr << " ";
+        }
+        cout<<endl;
+    }
+}
+int main(){
+    GraphAdjMatrix G(4);
+    G.addEdge(1,0);
+    G.addEdge(1,2);
+    G.addEdge(2,0);
+    G.addEdge(2,3);
+    G.printGraph();
+    cout<<endl;
+    G.removeEdge(2,1);
+    G.printGraph();
+    
+    GraphAdjList G1(4);
+    G1.addEdge(1,0);
+    G1.addEdge(1,2);
+    G1.addEdge(2,0);
+    G1.addEdge(2,3);
+    G1.printGraph();
+    cout<<endl;
+    G1.removeEdge(2,1);
+    G1.printGraph();
+    return 0;
+
+}
