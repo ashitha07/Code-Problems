@@ -1,0 +1,91 @@
+/*This program is to depict DFS and BFS in graph*/
+#include<iostream>
+#include<list>
+#include<vector>
+#include<queue>
+
+using namespace std;
+
+//Adjacency List
+class GraphAdjList {
+    private:
+        int numVertices;
+        vector<list<int>> AdjList;
+        vector<bool> visited;
+        
+    public:
+        GraphAdjList(int v){
+            numVertices = v;
+            AdjList.resize(v);
+            visited.resize(v, false);
+        }
+        void addEdge(int src, int dest);
+        void removeEdge(int src,int desc);
+        void printGraph();
+        void dfs(int vertex);
+        void bfs(int vertex);
+};
+void GraphAdjList::addEdge(int src,int dest){
+    AdjList[src].push_back(dest);
+    AdjList[dest].push_back(src);
+}
+void GraphAdjList::removeEdge(int src,int dest){
+    AdjList[src].remove(dest);
+    AdjList[dest].remove(src);
+}
+void GraphAdjList::printGraph(){
+    for(int i=0;i<numVertices;i++){
+        cout<<i<<"  --> ";
+        for (auto itr = AdjList[i].begin();itr != AdjList[i].end(); itr++) {
+            cout << *itr << " ";
+        }
+        cout<<endl;
+    }
+}
+void GraphAdjList::dfs(int vertex){
+    visited[vertex]=true;
+    
+    cout<< vertex << " ";
+    
+    list<int>::iterator it;
+    for(it=AdjList[vertex].begin();it!=AdjList[vertex].end();it++){
+        if(!visited[*it]){
+            dfs(*it);
+        }
+    }
+}
+void GraphAdjList::bfs(int vertex){
+    queue<int> q;
+    for(int i=0;i<numVertices;i++){
+        visited[i]=false;
+    }    
+    q.push(vertex);
+    visited[vertex]=true;
+    while(!q.empty()){
+        int n = q.front();
+        cout<<n <<" ";
+        q.pop();
+
+        list<int>::iterator it = AdjList[n].begin();
+        for(;it!=AdjList[n].end();it++){
+            if(!visited[*it]){
+                visited[*it]=true;
+                q.push(*it);
+            }
+        }
+    }
+}
+int main(){
+    
+    GraphAdjList G1(4);
+    G1.addEdge(1,0);
+    G1.addEdge(1,2);
+    G1.addEdge(2,0);
+    G1.addEdge(0,3);
+    G1.printGraph();
+    G1.dfs(0);
+    cout<<endl;
+    G1.bfs(0);
+        return 0;
+
+}
