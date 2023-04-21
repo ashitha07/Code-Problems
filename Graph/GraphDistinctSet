@@ -1,0 +1,95 @@
+/******************************************************************************
+This program depicts Quick Union and Quick find of root for disjoint sets
+*******************************************************************************/
+
+#include <iostream>
+#include <vector>
+
+using namespace std;
+class quickFind{
+    private:
+        vector<int> root;
+    public:
+        quickFind(int sz){
+            root.resize(sz);
+            for(int i=0;i<sz;i++){
+                root[i]=i;
+            }
+        }
+        bool connected(int x,int y){
+            return root[x]==root[y];
+        }
+        void unionSet(int x,int y){
+            if(root[x]!=root[y]){
+                int prevRoot = root[y];
+                root[y]=root[x];
+                for(int i=0;i<root.size();i++){
+                    if(prevRoot==root[i]){
+                        root[i]=root[x];
+                    }
+                }
+            }
+        }
+        int findRoot(int x){
+            return root[x];
+        }
+};
+class quickUnion{
+    private:
+        vector<int> root;
+    public:
+        quickUnion(int sz){
+            root.resize(sz);
+            for(int i=0;i<sz;i++){
+                root[i]=i;
+            }
+        }
+        int find(int x){
+            int i = x;
+            while(root[i]!=i){
+                i=root[i];
+            }
+            return i;
+        }
+        void unionSet(int x,int y){
+            int rootX = find(x);
+            int rootY = find(y);
+            if(rootX!=rootY){
+                root[rootY] = rootX;
+            }
+        }
+        bool connected(int x,int y){
+            return find(x)==find(y);
+        }
+    
+};
+int main()
+{
+    quickFind uf(10);
+    // 1-2-5-6-7 3-8-9 4
+    uf.unionSet(1, 2);
+    uf.unionSet(2, 5);
+    uf.unionSet(5, 6);
+    uf.unionSet(6, 7);
+    uf.unionSet(3, 8);
+    uf.unionSet(8, 9);
+    cout << uf.connected(1, 5) << endl;  // true
+    cout << uf.connected(5, 7) << endl;  // true
+    cout << uf.connected(4, 9) << endl;  // false
+    uf.unionSet(9, 4);
+    cout << uf.connected(4, 9) << endl;  // true
+    quickUnion uf1(10);
+    // 1-2-5-6-7 3-8-9 4
+    uf1.unionSet(1, 2);
+    uf1.unionSet(2, 5);
+    uf1.unionSet(5, 6);
+    uf1.unionSet(6, 7);
+    uf1.unionSet(3, 8);
+    uf1.unionSet(8, 9);
+    cout << uf1.connected(1, 5) << endl;  // true
+    cout << uf1.connected(5, 7) << endl;  // true
+    cout << uf1.connected(7, 3) << endl;  // false
+    uf1.unionSet(7, 3);
+    cout << uf1.connected(7, 3) << endl;  // true
+    return 0;
+}
