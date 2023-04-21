@@ -1,5 +1,5 @@
 /******************************************************************************
-This program depicts Quick Union and Quick find of root for disjoint sets
+This program depicts Quick Union /Quick find/ Union by Rank of root for disjoint sets
 *******************************************************************************/
 
 #include <iostream>
@@ -17,7 +17,7 @@ class quickFind{
             }
         }
         bool connected(int x,int y){
-            return root[x]==root[y];
+            return find(x)==find(y);
         }
         void unionSet(int x,int y){
             if(root[x]!=root[y]){
@@ -30,7 +30,7 @@ class quickFind{
                 }
             }
         }
-        int findRoot(int x){
+        int find(int x){
             return root[x];
         }
 };
@@ -63,8 +63,49 @@ class quickUnion{
         }
     
 };
+//optimised version of quick union
+class unionByRank{
+    private:
+        vector<int> root;
+        vector<int> rank;
+    public:
+        unionByRank(int sz){
+            root.resize(sz);
+            rank.resize(sz,1);
+            for(int i =0;i<sz;i++){
+                root[i]=i;
+            }
+        }
+        int find(int x){
+            while(root[x]!=x){
+                x = root[x];
+            }
+            return x;
+        }
+        void unionSet(int x,int y){
+            int rootX = find(x);
+            int rootY = find(y);
+            
+            if(rootX!=rootY){
+                if(rank[rootX]>rank[rootY]){
+                    root[rootY] = rootX;
+                }else if(rank[rootX]<rank[rootY]){
+                    root[rootX]=rootY;
+                }else {
+                    root[rootY] = rootX;
+                    rank[rootX]+=1;
+                }
+            }
+        }
+        bool connected(int x, int y){
+            return find(x)==find(y);
+        }
+    
+};
 int main()
-{
+{    
+    cout<<"********Quick Find**************"<<endl;
+    /*Quick Find */
     quickFind uf(10);
     // 1-2-5-6-7 3-8-9 4
     uf.unionSet(1, 2);
@@ -78,6 +119,9 @@ int main()
     cout << uf.connected(4, 9) << endl;  // false
     uf.unionSet(9, 4);
     cout << uf.connected(4, 9) << endl;  // true
+
+    cout<<"******** Quick Union **************"<<endl;
+    /*Quick Union */
     quickUnion uf1(10);
     // 1-2-5-6-7 3-8-9 4
     uf1.unionSet(1, 2);
@@ -91,5 +135,21 @@ int main()
     cout << uf1.connected(7, 3) << endl;  // false
     uf1.unionSet(7, 3);
     cout << uf1.connected(7, 3) << endl;  // true
+    
+    cout<<"********Union by Rank**************"<<endl;
+    /*Union by rank */
+    unionByRank uf2(10);
+    // 1-2-5-6-7 3-8-9 4
+    uf2.unionSet(1, 2);
+    uf2.unionSet(2, 5);
+    uf2.unionSet(5, 6);
+    uf2.unionSet(6, 7);
+    uf2.unionSet(3, 8);
+    uf2.unionSet(8, 9);
+    cout << uf2.connected(1, 5) << endl;  // true
+    cout << uf2.connected(5, 7) << endl;  // true
+    cout << uf2.connected(7, 3) << endl;  // false
+    uf2.unionSet(7, 3);
+    cout << uf2.connected(7, 3) << endl;  // true
     return 0;
 }
