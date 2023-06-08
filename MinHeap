@@ -1,0 +1,86 @@
+/******************************************************************************
+
+MinHeap Implementation using vector
+
+*******************************************************************************/
+#include <iostream>
+#include<vector>
+
+using namespace std;
+class MinHeap{
+private:
+    vector<int> mHeap;
+    int capacity;
+    int size;
+public:
+    MinHeap(int capacity){
+        this->capacity = capacity;
+        mHeap.resize(capacity+1);
+        mHeap[0] = 0;
+    }
+    void add(int element){
+        size++;
+        if(size>capacity){
+            cout<<"Exceeded element size";
+            size--;
+            return;
+        }
+        int index = size;
+        mHeap[index]=element;
+        int parent = index/2;
+        
+        while(mHeap[parent]>mHeap[index] && index>1) {
+            int temp = mHeap[parent];
+            mHeap[parent] = mHeap[index];
+            mHeap[index] = temp;
+            index = parent;
+            parent = index/2;
+        }
+        
+    }
+    int peek(){
+        return mHeap[1];
+    }
+    void pop(){
+        if(size==0){
+            cout<<"Heap is already empty";
+            return;
+        }
+        int removeElem = mHeap[1];
+        mHeap[1] = mHeap[size];
+        size--;
+        int index=1;
+        while(index <= size/2){
+            int left = index*2;
+            int right = index*2 + 1;
+            if(mHeap[index]>mHeap[left]||mHeap[index]>mHeap[right]){
+                if(mHeap[index]>mHeap[left]){
+                    int temp = mHeap[index];
+                    mHeap[index] = mHeap[left];
+                    mHeap[left] = temp;
+                    index = left;
+                }else {
+                    int temp = mHeap[index];
+                    mHeap[index] = mHeap[right];
+                    mHeap[right] = temp;
+                    index = right;
+                }
+            }else {
+                break;
+            }
+        }
+    }
+    
+    
+};
+int main()
+{
+     MinHeap minHeap(3);
+        minHeap.add(3);
+        minHeap.add(1);
+        minHeap.add(2);
+    cout<<minHeap.peek()<<endl;
+    minHeap.pop();
+    cout<<minHeap.peek();
+    return 0;
+}
