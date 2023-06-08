@@ -1,0 +1,49 @@
+/******************************************************************************
+
+HeapSort
+
+*******************************************************************************/
+#include <iostream>
+#include<vector>
+
+using namespace std;
+void maxHeapify(vector<int>& arr,int size,int index){
+    int left = 2*index+1;
+    int right = 2*index+2;
+    int largest = index;
+    if(left<size && arr[left]>arr[largest]){
+        largest = left;
+    }
+    if(right<size && arr[right]>arr[largest]){
+        largest = right;
+    }
+    if(largest != index){
+        int temp = arr[largest];
+        arr[largest] = arr[index];
+        arr[index] = temp;
+        maxHeapify(arr,size,largest);
+    }
+}
+void heapSort(vector<int>& inputArray){
+    int n = inputArray.size();
+    for(int i=n/2 - 1;i>=0;i--){
+        maxHeapify(inputArray,inputArray.size(),i);
+    }
+    for(int i=n-1;i>=0;i--){
+        int temp = inputArray[i];
+        inputArray[i] = inputArray[0];
+        inputArray[0] = temp;
+        
+        maxHeapify(inputArray,i,0);
+    }
+}
+
+int main()
+{
+    vector<int> arr = {5,4,2,7,8};
+    heapSort(arr);
+    for(int i:arr){
+        cout<<i<<" ";
+    }
+    return 0;
+}
