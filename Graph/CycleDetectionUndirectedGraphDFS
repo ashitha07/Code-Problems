@@ -1,0 +1,29 @@
+private:
+    bool detect(int src,int parent,vector<int>& visited,vector<int> adj[]){
+        visited[src]=1;
+        
+        for(int child:adj[src]){
+            if(!visited[child]){
+                visited[child]=1;
+                if(detect(child,src,visited,adj)){
+                    return true;
+                }
+            }else if(parent!=child){
+                return true;
+            }
+        }
+        return false;
+    }
+    public:
+    // Function to detect cycle in an undirected graph.
+    bool isCycle(int V, vector<int> adj[]) {
+        vector<int> visited{0};
+        for(int i=0;i<V;i++){
+            if(!visited[i]){
+                if(detect(i,-1,visited,adj)==true){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
