@@ -1,0 +1,53 @@
+/******************************************************************************
+Dynamic Array implementation - for amortised analysis
+
+*******************************************************************************/
+
+#include <iostream>
+#include <string.h> 
+#include <array>
+
+using namespace std;
+class Array{
+private:
+    int* a;
+    int size;
+    int counter;
+public:
+    Array(){
+        a = new int();
+        size = 1;
+        counter = 0;
+    }
+    void add(int element){
+        if(counter==size){
+            cout<<"doubling size of array!!";
+            int tempSize = size; 
+            size = 2*size;
+            int* temp = new int[size];
+            memcpy(temp,a,tempSize*(sizeof(*a)));
+            a = temp;
+        }
+        a[counter] = element;
+        counter++;
+    }
+    void display(){
+        cout<<"Array"<<endl;
+        for(int i=0;i<size;i++){
+            cout<<a[i]<<" ";
+        }
+        cout<<endl<<"size: "<<size<<" counter"<<counter<<endl;
+    }
+};
+int main()
+{
+    Array A;
+    cout<<"Enter array values";
+    for(int i=0;i<20;i++){
+        int temp;
+        cin>>temp;
+        A.add(temp);
+        A.display();
+    }
+    return 0;
+}
