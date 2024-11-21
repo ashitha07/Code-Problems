@@ -1,0 +1,40 @@
+/******************************************************************************
+
+QuickFind Implementation
+
+*******************************************************************************/
+
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+class QuickFind{
+    vector<int> id;
+    public:
+    QuickFind(int n){
+        id.resize(n);
+        for(int i=0;i<n;i++){       
+            id[i]=i;
+        }
+    }
+    bool isConnected(int p,int q){
+        return id[p]==id[q];
+    }
+    void    Union(int p,int q){
+        int pid = id[p];
+        int qid = id[q];
+        for(int i=0;i<id.size();i++){
+            if(id[i]==pid) id[i]=qid;
+        }
+    }
+};
+int main()
+{
+    QuickFind QF(4);
+    QF.Union(1,2);
+    QF.Union(0,3);
+    cout<<"Is 1 and 3 connected? :- "<<(QF.isConnected(1,3)?"True":"False")<<endl;
+    cout<<"Is 1 and 2 connected? :- "<<(QF.isConnected(1,2)?"True":"False");
+
+}
