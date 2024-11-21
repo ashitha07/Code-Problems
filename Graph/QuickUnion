@@ -1,0 +1,43 @@
+/******************************************************************************
+QuickUnion Implementation
+
+*******************************************************************************/
+
+#include <iostream>
+#include <vector>
+
+using namespace std;
+class QuickUnion{
+  vector<int> id;
+  int root(int p){
+      while(id[p]!=p) p = id[p];
+      return p;
+  }
+  public:
+    QuickUnion(int n){
+        id.resize(n);
+        for(int i=0;i<n;i++){
+            id[i]=i;
+        }
+    }
+    bool isConnected(int p,int q){
+        return root(p)==root(q);
+    }
+    void Union(int p,int q){
+        if(!isConnected(p,q)){
+            int proot = root(p);
+            int qroot = root(q);
+            id[proot]=qroot;
+        }
+        
+    }
+};
+int main()
+{
+    QuickUnion QU(5);
+    QU.Union(0,1);
+    QU.Union(1,4);
+    QU.Union(2,3);
+    cout<<"Is 1 and 2 connected? :-"<<(QU.isConnected(1,2)?"True":"False")<<endl;
+    cout<<"Is 4 and 0 connected? :-"<<(QU.isConnected(0,4)?"True":"False");
+}
