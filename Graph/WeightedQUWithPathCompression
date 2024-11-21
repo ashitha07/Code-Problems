@@ -1,0 +1,57 @@
+/******************************************************************************
+Weighted QuickUnion with path compression Implementation
+
+This uses size rank array
+*******************************************************************************/
+
+#include <iostream>
+#include <vector>
+
+using namespace std;
+class QuickUnion{
+  vector<int> id;
+  vector<int> sz;
+  int root(int p){
+      while(id[p]!=p) {
+          id[p] = id[id[p]];
+          p = id[p];
+      }
+      return p;
+  }
+  public:
+    QuickUnion(int n){
+        id.resize(n);
+        sz.resize(n,1);
+        for(int i=0;i<n;i++){
+            id[i]=i;
+        }
+    }
+    bool isConnected(int p,int q){
+        return root(p)==root(q);
+    }
+    void Union(int p,int q){
+        if(!isConnected(p,q)){
+            int proot = root(p);
+            int qroot = root(q);
+            if(sz[proot]<sz[qroot]){
+                id[proot]=qroot;
+                sz[qroot]++;
+            }
+            else {
+                id[qroot]=proot;
+                sz[proot]++;
+            }
+                
+        }
+        
+    }
+};
+int main()
+{
+    QuickUnion QU(5);
+    QU.Union(0,1);
+    QU.Union(1,4);
+    QU.Union(2,3);
+    cout<<"Is 1 and 2 connected? :-"<<(QU.isConnected(1,2)?"True":"False")<<endl;
+    cout<<"Is 4 and 0 connected? :-"<<(QU.isConnected(0,4)?"True":"False");
+}
